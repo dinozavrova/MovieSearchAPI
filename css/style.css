@@ -51,7 +51,6 @@ body {
   border: 2px solid var(--background);
   border-radius: 5px;
   padding: 5px;
-  
 }
 
 #header_search:hover {
@@ -82,10 +81,10 @@ body {
 }
 
 .film_poster:hover {
-  filter: brightness(0.6);
   cursor: pointer;
   transition: 0.3s;
-  box-shadow: 10px 10px var(--pink);
+  box-shadow: 10px 5px var(--pink);
+  transform: scale(1.05);
 }
 
 .film_poster-info {

@@ -38,9 +38,11 @@ function getClassByRate(vote) {
 
 function showMovies(data) {
   const moviesContainer = document.querySelector(".film");
-  moviesContainer.innerHTML = ""; // очистка
+  moviesContainer.innerHTML = "";
 
-  data.items.forEach((movie) => {
+  const movies = data.items || data.films;
+
+  movies.forEach((movie) => {
     const movieEl = document.createElement("div");
     movieEl.classList.add("film_card");
 
@@ -57,8 +59,8 @@ function showMovies(data) {
             .map((g) => g.genre)
             .join(", ")}</p>
           <div class="film_poster-average film_poster-average--${getClassByRate(
-            movie.ratingKinopoisk
-          )}">${movie.ratingKinopoisk ?? "-"}</div>
+            movie.ratingKinopoisk || movie.rating
+          )}">${(movie.ratingKinopoisk || movie.rating) ?? "-"}</div>
         </div>
       </div>
     `;
@@ -67,10 +69,17 @@ function showMovies(data) {
   });
 }
 
-//TODO ПОИСКОВИК 
+const form = document.querySelector("form");
+const search = document.getElementById("header_search");
 
-/*form.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  1:06:00 по видосу
-}); */
+  const apiSearchUrl = `${API_URL_SEARCH}${search.value}`;
+
+  if (search.value) {
+    getMovies(apiSearchUrl);
+
+    search.value = "";
+  }
+});
