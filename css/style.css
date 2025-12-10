@@ -1,0 +1,125 @@
+:root {
+  --background: #0f0f11;
+  --main-text: #fff;
+  --pink: #ff6ec7;
+  --text-secondary: #b5b5be;
+  --rating-red: #e50914;
+  --rating-green: #21d07a;
+  --rating-orange: #ff9800;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--main-text);
+  font-family: "Inter", sans-serif;
+}
+
+.header_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100vw;
+  padding: 20px;
+  height: 60px;
+}
+
+.header_logo {
+  color: white;
+  text-decoration: none;
+  font-size: 30px;
+}
+
+.header_logo:hover {
+  color: var(--pink);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#header_search {
+  width: 400px;
+  height: 30px;
+  border: 2px solid var(--background);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#header_search:hover {
+  background-color: transparent;
+  border: 2px solid var(--pink);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.film {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-block: 10px;
+  margin-inline: 100px;
+}
+
+.film_card {
+  margin: 10px;
+  width: 200px;
+  position: relative;
+}
+
+.film_poster {
+  width: 100%;
+  min-height: 300px ;
+}
+
+.film_poster:hover {
+  filter: brightness(0.6);
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 10px 10px var(--pink);
+}
+
+.film_poster-info {
+  padding-block: 10px;
+}
+
+.film_poster-title {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.film_poster-genre {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.film_poster-average {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 36px;
+  height: 36px;
+  background-color: var(--background);
+  padding: 5px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+}
+
+.film_poster-average--green {
+  border: 2px solid var(--rating-green);
+}
+
+.film_poster-average--orange {
+  border: 2px solid var(--rating-orange);
+}
+
+.film_poster-average--red {
+  border: 2px solid var(--rating-red);
+}
