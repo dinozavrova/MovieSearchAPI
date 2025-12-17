@@ -31,13 +31,9 @@ async function getMovies(url) {
 
 //Рейтинг по цвету
 function getClassByRate(vote) {
-  if (vote >= 7) {
-    return "green";
-  } else if (vote > 5) {
-    return "orange";
-  } else {
-    return "red";
-  }
+  if (vote >= 7) return "green";
+  else if (vote > 5) return "orange";
+  else return "red";
 }
 
 //Отрисовка карточек фильмов
@@ -69,15 +65,32 @@ function showMovies(data) {
         </div>
       </div>
     `;
-    movieElement.addEventListener("click", () => openModal(movie.kinopoiskId));
+    const id = movie.filmId || movie.kinopoiskId;
+    movieElement.addEventListener("click", () => openModal(id));
 
     moviesContainer.append(movieElement);
   });
 }
 
+const form = document.querySelector("form");
+const search = document.getElementById("header_search");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const apiSearchUrl = `${API_URL_SEARCH}${search.value}`;
+  if (search.value) {
+    getMovies(apiSearchUrl);
+    search.value = "";
+  } else {
+    getMovies(API_URL_POPULAR);
+  }
+});
+
 //Модальное окно
 const modalElement = document.querySelector(".modal");
 async function openModal(id) {
+  if (!id) return;
   const response = await fetch(API_URL_MOVIE_DETAILS + id, {
     headers: {
       "Content-Type": "application/json",
@@ -87,6 +100,8 @@ async function openModal(id) {
   const responseData = await response.json();
 
   modalElement.classList.add("modal--show");
+  document.body.classList.add("stop-scrolling");
+
   modalElement.innerHTML = `
       <div class="modal__card">
             <img
@@ -94,40 +109,48 @@ async function openModal(id) {
               src="${responseData.posterUrl}"
               alt="Постер фильма"
             />
+            
             <h2>
-              <span class="modal__movie-title">${responseData.nameRu}</span>
-              <span class="modal__movie-release-year"> - ${
-                responseData.year
-              }</span>
+              <h2 class="modal__movie-title">
+  <a href="${responseData.webUrl}" target="_blank" rel="noopener noreferrer">
+    ${responseData.nameRu}
+  </a>
+</h2>
+              <h2 class="modal__movie-release-year"> (${responseData.year})</h2>
             </h2>
             <ul class="modal__movie-info">
               <div class="loader"></div>
-              <li class="modal__movie-genre">
+              <li class="modal__movie-genre">Жанр:
                ${
                  responseData.genres
                    ?.map((g) => `<span>${g.genre}</span>`)
                    .join(", ") || "—"
-               }
+               }.
               </span>
               </li>
-              <li class="modal__movie-runtime">
-                ${responseData.filmLength} минут.
-              </li>
+              ${
+                responseData.filmLength
+                  ? `<li class="modal__movie-runtime">Время: 
+                ${Math.floor(responseData.filmLength / 60)} ч. ${
+                      responseData.filmLength % 60
+                    } мин.
+              </li>`
+                  : ""
+              }
               <li>
-                <p>${responseData.description}</p>
+                <p>Сюжет: ${responseData.description}</p>
               </li>
             </ul>
             
           </div>
     
   `;
-  const closeBtn = document.querySelector(".modal__button-close");
-  closeBtn.addEventListener("click", () => closeModal());
 }
 
 //Функции закрытия модалки через классЛист
 function closeModal() {
   modalElement.classList.remove("modal--show");
+  document.body.classList.remove("stop-scrolling");
 }
 window.addEventListener("click", (e) => {
   //закрытие на фон
