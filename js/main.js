@@ -3,9 +3,12 @@ const API_URL_POPULAR =
   "https://kinopoiskapiunofficial.tech/api/v2.2/films/collections?type=TOP_POPULAR_ALL";
 const API_URL_SEARCH =
   "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=";
+const API_URL_MOVIE_DETAILS =
+  "https://kinopoiskapiunofficial.tech/api/v2.2/films/";
 
 getMovies(API_URL_POPULAR);
 
+//Запрос к АПИ для отрисовки карточек фильма
 async function getMovies(url) {
   try {
     const resp = await fetch(url, {
@@ -26,6 +29,7 @@ async function getMovies(url) {
   }
 }
 
+//Рейтинг по цвету
 function getClassByRate(vote) {
   if (vote >= 7) {
     return "green";
@@ -36,6 +40,7 @@ function getClassByRate(vote) {
   }
 }
 
+//Отрисовка карточек фильмов
 function showMovies(data) {
   const moviesContainer = document.querySelector(".film");
   moviesContainer.innerHTML = "";
@@ -43,10 +48,10 @@ function showMovies(data) {
   const movies = data.items || data.films;
 
   movies.forEach((movie) => {
-    const movieEl = document.createElement("div");
-    movieEl.classList.add("film_card");
+    const movieElement = document.createElement("div");
+    movieElement.classList.add("film_card");
 
-    movieEl.innerHTML = `
+    movieElement.innerHTML = `
       <div class="film_poster-inner">
         <img
           src="${movie.posterUrlPreview}"
@@ -64,22 +69,75 @@ function showMovies(data) {
         </div>
       </div>
     `;
+    movieElement.addEventListener("click", () => openModal(movie.kinopoiskId));
 
-    moviesContainer.append(movieEl);
+    moviesContainer.append(movieElement);
   });
 }
 
-const form = document.querySelector("form");
-const search = document.getElementById("header_search");
+//Модальное окно
+const modalElement = document.querySelector(".modal");
+async function openModal(id) {
+  const response = await fetch(API_URL_MOVIE_DETAILS + id, {
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": API_KEY,
+    },
+  });
+  const responseData = await response.json();
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+  modalElement.classList.add("modal--show");
+  modalElement.innerHTML = `
+      <div class="modal__card">
+            <img
+              class="modal__movie-backdrop"
+              src="${responseData.posterUrl}"
+              alt="Постер фильма"
+            />
+            <h2>
+              <span class="modal__movie-title">${responseData.nameRu}</span>
+              <span class="modal__movie-release-year"> - ${
+                responseData.year
+              }</span>
+            </h2>
+            <ul class="modal__movie-info">
+              <div class="loader"></div>
+              <li class="modal__movie-genre">
+               ${
+                 responseData.genres
+                   ?.map((g) => `<span>${g.genre}</span>`)
+                   .join(", ") || "—"
+               }
+              </span>
+              </li>
+              <li class="modal__movie-runtime">
+                ${responseData.filmLength} минут.
+              </li>
+              <li>
+                <p>${responseData.description}</p>
+              </li>
+            </ul>
+            
+          </div>
+    
+  `;
+  const closeBtn = document.querySelector(".modal__button-close");
+  closeBtn.addEventListener("click", () => closeModal());
+}
 
-  const apiSearchUrl = `${API_URL_SEARCH}${search.value}`;
-
-  if (search.value) {
-    getMovies(apiSearchUrl);
-
-    search.value = "";
+//Функции закрытия модалки через классЛист
+function closeModal() {
+  modalElement.classList.remove("modal--show");
+}
+window.addEventListener("click", (e) => {
+  //закрытие на фон
+  if (e.target === modalElement) {
+    closeModal();
+  }
+});
+window.addEventListener("keydown", (e) => {
+  //По клавише Esc
+  if (e.keyCode == 27) {
+    closeModal();
   }
 });
