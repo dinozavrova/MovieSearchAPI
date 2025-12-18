@@ -42,6 +42,7 @@ body {
 .header_logo:hover {
   color: var(--pink);
   cursor: pointer;
+  text-shadow: 0 0 20px var(--pink);
   transition: 0.3s;
 }
 
@@ -187,7 +188,7 @@ body {
 }
 
 .modal__movie-backdrop {
-  width: 260px;
+  width: 300px;
   height: 100%;
   max-width: 30vw;
   margin: 0 auto;
@@ -236,10 +237,15 @@ p {
   top: 20px;
   right: 20px;
   background: none;
-  color: white;
+  color: var(--pink);
   font-size: 24px;
   border: none;
   cursor: pointer;
+}
+
+.modal__button-close:hover {
+  text-shadow: 0px 0px 20px var(--pink);
+  transition: 0.5s;
 }
 
 ul li {
@@ -251,4 +257,32 @@ ul li {
 .stop-scrolling {
   height: 100%;
   overflow: hidden;
+}
+
+.footer_button {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.pageNumber {
+  color: var(--pink);
+  font-size: 20px;
+}
+
+.prevPage,
+.nextPage {
+  background-color: var(--background);
+  border: none var(--pink);
+  color: var(--pink);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.prevPage:hover,
+.nextPage:hover {
+  cursor: pointer;
+  text-shadow: 0px 0px 20px var(--pink);
+  transition: 0.3s;
 }

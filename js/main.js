@@ -8,7 +8,7 @@ const API_URL_MOVIE_DETAILS =
 
 getMovies(API_URL_POPULAR);
 
-//Запрос к АПИ для отрисовки карточек фильма
+//Запрос к АПИ за фильмами
 async function getMovies(url) {
   try {
     const resp = await fetch(url, {
@@ -20,7 +20,7 @@ async function getMovies(url) {
 
     if (resp.ok) {
       const respData = await resp.json();
-      showMovies(respData);
+      showMovies(respData); //данные переходят в отрисвоку дома
     } else {
       console.log("Error HTTP: " + resp.status);
     }
@@ -159,7 +159,7 @@ async function openModal(id) {
         </div>
     
   `;
-  const btnClose = document.querySelector(".modal__button-close"); 
+  const btnClose = document.querySelector(".modal__button-close");
   btnClose.addEventListener("click", () => closeModal());
 }
 
@@ -182,3 +182,25 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+//Пагинация
+
+let currentPage = 1;
+
+async function loadMovies(page) {
+  getMovies(`${API_URL_POPULAR}&page=${page}`);
+}
+
+const pageSpan = document.querySelector(".pageNumber");
+
+document.querySelector(".nextPage").addEventListener("click", () => {
+  currentPage++;
+  loadMovies(currentPage);
+  pageSpan.textContent = currentPage;
+});
+document.querySelector(".prevPage").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    loadMovies(currentPage);
+    pageSpan.textContent = currentPage;
+  }
+});
