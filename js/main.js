@@ -104,22 +104,35 @@ async function openModal(id) {
 
   modalElement.innerHTML = `
       <div class="modal__card">
+            
             <img
               class="modal__movie-backdrop"
-              src="${responseData.posterUrl}"
+              src="${responseData.posterUrl}" 
               alt="Постер фильма"
             />
-            
+
+        <div class="modal__content">
+
             <h2>
               <h2 class="modal__movie-title">
-  <a href="${responseData.webUrl}" target="_blank" rel="noopener noreferrer">
-    ${responseData.nameRu}
-  </a>
-</h2>
+                <a href="${
+                  responseData.webUrl
+                }" target="_blank" rel="noopener noreferrer">
+                ${responseData.nameRu}
+                </a>
+              </h2>
               <h2 class="modal__movie-release-year"> (${responseData.year})</h2>
             </h2>
             <ul class="modal__movie-info">
               <div class="loader"></div>
+              <li class="modal__movie-country">Страна:
+               ${
+                 responseData.countries
+                   ?.map((c) => `<span>${c.country}</span>`)
+                   .join(", ") || "—"
+               }.
+              </span>
+              </li>
               <li class="modal__movie-genre">Жанр:
                ${
                  responseData.genres
@@ -141,10 +154,13 @@ async function openModal(id) {
                 <p>Сюжет: ${responseData.description}</p>
               </li>
             </ul>
-            
+            <button class="modal__button-close">✕</button>
           </div>
+        </div>
     
   `;
+  const btnClose = document.querySelector(".modal__button-close"); 
+  btnClose.addEventListener("click", () => closeModal());
 }
 
 //Функции закрытия модалки через классЛист
@@ -152,6 +168,7 @@ function closeModal() {
   modalElement.classList.remove("modal--show");
   document.body.classList.remove("stop-scrolling");
 }
+
 window.addEventListener("click", (e) => {
   //закрытие на фон
   if (e.target === modalElement) {
@@ -164,3 +181,4 @@ window.addEventListener("keydown", (e) => {
     closeModal();
   }
 });
+

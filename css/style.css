@@ -51,6 +51,7 @@ body {
   border: 2px solid var(--background);
   border-radius: 5px;
   padding: 5px;
+  color: var(--pink);
 }
 
 #header_search:hover {
@@ -150,21 +151,51 @@ body {
 }
 
 .modal__card {
-  max-width: 50%;
-  padding: 20px;
+  max-width: 70vw;
+  height: 80vh;
+  max-height: 90vh;
+  padding: 30px;
   box-shadow: 0 0 100px var(--pink);
   background-color: rgba(15, 15, 17, 0.9);
   border-radius: 10px;
   color: var(--main-text);
   display: flex;
+  gap: 30px;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.modal__content {
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
 }
 
 .modal__movie-backdrop {
-  width: 300px;
+  width: 260px;
+  height: 100%;
+  max-width: 30vw;
   margin: 0 auto;
   border-radius: 10px;
   margin-block: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+  align-self: center;
 }
 
 h2 {
@@ -173,9 +204,13 @@ h2 {
   justify-content: center;
 }
 
-a{
+a {
   text-decoration: none;
   color: var(--main-text);
+}
+
+p {
+  line-height: 1.5;
 }
 
 .modal__movie-title:hover {
@@ -193,6 +228,18 @@ a{
 .modal__movie-info {
   margin-block: 20px;
   align-self: stretch;
+  overflow-y: auto;
+}
+
+.modal__button-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  color: white;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
 }
 
 ul li {
