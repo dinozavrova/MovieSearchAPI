@@ -214,11 +214,15 @@ p {
   line-height: 1.5;
 }
 
+.modal__movie-title {
+  font-size: 30px;
+  color: var(--main-text);
+}
+
 .modal__movie-title:hover {
   cursor: pointer;
   transition: 0.3s;
-  font-size: 24px;
-  color: var(--main-text);
+
   text-shadow: 0px 0px 20px var(--pink);
 }
 

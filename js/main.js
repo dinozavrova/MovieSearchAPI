@@ -29,13 +29,6 @@ async function getMovies(url) {
   }
 }
 
-//Рейтинг по цвету
-function getClassByRate(vote) {
-  if (vote >= 7) return "green";
-  else if (vote > 5) return "orange";
-  else return "red";
-}
-
 //Отрисовка карточек фильмов
 function showMovies(data) {
   const moviesContainer = document.querySelector(".film");
@@ -50,18 +43,27 @@ function showMovies(data) {
     movieElement.innerHTML = `
       <div class="film_poster-inner">
         <img
-          src="${movie.posterUrlPreview}"
+          src="${movie.posterUrl}"
           alt="${movie.nameRu}"
           class="film_poster"
         />
         <div class="film_poster-info">
-          <h5 class="film_poster-title">${movie.nameRu}</h5>
+          <h5 class="film_poster-title">${movie.nameRu}</h5>          
           <p class="film_poster-genre">${movie.genres
             .map((g) => g.genre)
             .join(", ")}</p>
+
+
           <div class="film_poster-average film_poster-average--${getClassByRate(
             movie.ratingKinopoisk || movie.rating
-          )}">${(movie.ratingKinopoisk || movie.rating) ?? "-"}</div>
+          )}">${
+      (movie.ratingKinopoisk && movie.ratingKinopoisk !== "null") ||
+      (movie.rating && movie.rating !== "null")
+        ? movie.ratingKinopoisk || movie.rating
+        : "-"
+    }</div>
+
+
         </div>
       </div>
     `;
@@ -87,6 +89,13 @@ form.addEventListener("submit", (e) => {
   }
 });
 
+//Рейтинг по цвету
+export function getClassByRate(vote) {
+  if (vote >= 7) return "green";
+  else if (vote > 5) return "orange";
+  else return "red";
+}
+
 //Модальное окно
 const modalElement = document.querySelector(".modal");
 async function openModal(id) {
@@ -102,18 +111,19 @@ async function openModal(id) {
   modalElement.classList.add("modal--show");
   document.body.classList.add("stop-scrolling");
 
+  const modalPoster = responseData.posterUrl;
+
   modalElement.innerHTML = `
       <div class="modal__card">
             
-            <img
-              class="modal__movie-backdrop"
-              src="${responseData.posterUrl}" 
-              alt="Постер фильма"
-            />
+             <img
+                class="modal__movie-backdrop"
+                src="${modalPoster}" 
+                alt="Постер фильма"
+              />
 
         <div class="modal__content">
-
-            <h2>
+            <div>
               <h2 class="modal__movie-title">
                 <a href="${
                   responseData.webUrl
@@ -121,26 +131,36 @@ async function openModal(id) {
                 ${responseData.nameRu}
                 </a>
               </h2>
-              <h2 class="modal__movie-release-year"> (${responseData.year})</h2>
-            </h2>
+
+              <h2 class="modal__movie-release-year"> (${
+                responseData.year ? `${responseData.year}` : ""
+              })</h2>
+            </div>
+
             <ul class="modal__movie-info">
               <div class="loader"></div>
-              <li class="modal__movie-country">Страна:
-               ${
-                 responseData.countries
-                   ?.map((c) => `<span>${c.country}</span>`)
-                   .join(", ") || "—"
-               }.
-              </span>
-              </li>
+              ${
+                responseData.countries
+                  ? `<li class="modal__movie-country">
+                  Страна: ${
+                    responseData.countries
+                      .map((c) => `<span>${c.country}</span>`)
+                      .join(", ") || "—"
+                  }.
+                  </li>`
+                  : ""
+              }
+
+              
               <li class="modal__movie-genre">Жанр:
                ${
                  responseData.genres
                    ?.map((g) => `<span>${g.genre}</span>`)
-                   .join(", ") || "—"
+                   .join(", ") || ""
                }.
               </span>
               </li>
+
               ${
                 responseData.filmLength
                   ? `<li class="modal__movie-runtime">Время: 
@@ -150,9 +170,17 @@ async function openModal(id) {
               </li>`
                   : ""
               }
-              <li>
-                <p>Сюжет: ${responseData.description}</p>
-              </li>
+
+              ${
+                responseData.description
+                  ? `
+                <li>
+                  <p>Сюжет: ${responseData.description}</p>
+                </li>
+                `
+                  : ""
+              }
+
             </ul>
             <button class="modal__button-close">✕</button>
           </div>
