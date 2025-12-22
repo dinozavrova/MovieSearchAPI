@@ -93,6 +93,7 @@ form.addEventListener("submit", (e) => {
 export function getClassByRate(vote) {
   if (vote >= 7) return "green";
   else if (vote > 5) return "orange";
+  else if (!vote) return "grey";
   else return "red";
 }
 

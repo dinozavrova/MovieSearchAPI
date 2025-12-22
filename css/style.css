@@ -131,6 +131,9 @@ body {
 .film_poster-average--red {
   border: 2px solid var(--rating-red);
 }
+.film_poster-average--grey {
+  border: 2px solid grey;
+}
 
 .modal {
   display: none;
