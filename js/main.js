@@ -6,6 +6,9 @@ const API_URL_SEARCH =
 const API_URL_MOVIE_DETAILS =
   "https://kinopoiskapiunofficial.tech/api/v2.2/films/";
 
+
+
+  
 getMovies(API_URL_POPULAR);
 
 //Запрос к АПИ за фильмами
