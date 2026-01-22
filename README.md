@@ -34,3 +34,7 @@
    git clone https://github.com/username/netflix-clone.git
    ```
 2. Запустить через Live Server
+
+
+## 🔗 Ссылка
+https://dinozavrova.github.io/MovieSearchAPI/
