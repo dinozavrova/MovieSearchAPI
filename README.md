@@ -36,5 +36,5 @@
 2. Запустить через Live Server
 
 
-## 🔗 Ссылка
+## 🔗 Попробуйте сами!
 https://dinozavrova.github.io/MovieSearchAPI/
